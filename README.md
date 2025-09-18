@@ -33,3 +33,12 @@ sudo defaults write /Library/Preferences/com.apple.RemoteManagement RestoreMachi
 ```
 
 Your machine will keep the screen on.
+
+## External Libraries And Thanks
+
+I used the following projects to create some of the dashboards. Thank you to all the people who created them or keep maintaining those projects:
+
+* [98.css](https://github.com/jdan/98.css/)
+* [CRT-Filter](https://github.com/Billgonzo123/CRT-Filter/tree/main)
+* [W95 Font](https://arnesava.github.io/w95font/)
+* [WebSavers](https://github.com/thinkyhead/WebSavers)
