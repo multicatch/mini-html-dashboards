@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <link rel="stylesheet" href="https://unpkg.com/98.css" />
+        <link rel="stylesheet" href="../assets/crt.css" />
+        <style type="text/css">body { cursor: url('data:image/x-icon;base64,AAACAAEAICACAAcACQAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAYAAAAMAAAADAAAABgAAAEYAAABsAAAAfAAAAH+AAAB/AAAAfgAAAHwAAAB4AAAAcAAAAGAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//////////////////////////////////n////w////8P///+H///3h///8w////EP///wH///8AH///AD///wB///8A////Af///wP///8H////D////x////8/////f////////////////////////////////////////8='), auto; }</style>
+        <style>
+body {
+    margin: 0;
+    background-color: #008080;
+    height: 90vh;
+    width: 90vw;
+}
+
+.window {
+    transform: scale(2.5);
+}
+
+.clock {
+    width: 200px;
+    margin: 0;
+    position: absolute;
+    top: calc(50% - 100px);
+    left: calc(50% - 100px);
+    text-align: center;
+}
+
+#time {
+    font-size: 500%;
+    margin: 0;
+}
+
+#date {
+    /*font-size: 5vh;*/
+    margin: 0;
+}
+
+.weather {
+    width: 150px;
+    position: absolute;
+    right: 200px;
+    bottom: 150px;
+}
+
+.weather #temperature {
+    font-size: 200%;
+}
+
+.title-bar-controls > button {
+    margin-left: 2px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    transform: scale(1.1);
+}
+
+        </style>
+    </head>
+    <body>
+        <div class="crt">
+            <div class="weather window">
+                <div class="title-bar inactive">
+                    <div class="title-bar-text">Weather</div>
+                    <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize" disabled></button>
+                    <button aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div id="temperature"></div>
+                </div>
+                <div class="status-bar">
+                    <p class="status-bar-field">Clouds: <span id="clouds">0</span>%</p>
+                    <p class="status-bar-field">Rain: <span id="precipitation">0</span>%</p>
+                </div>
+            </div>
+            <div class="clock window">
+                <div class="title-bar">
+                    <div class="title-bar-text">Clock</div>
+                    <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div id="time">12:00</div>
+                    <div id="date">01-01-1970</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phosphorsWrapper">
+            <div class="phosphorsContainer">
+                <div class="red">
+                    <div class="scanlines R "> </div>
+                </div>
+
+                <div class="green">
+                    <div class="scanlines G "> </div>
+                </div>
+
+                <div class="blue">
+                    <div class="scanlines B"> </div>
+                </div>
+
+                <div class="mask"></div>
+
+            </div>
+        </div>
+        <script>
+            const latitude = '0.0';
+            const longitude = '0.0';
+
+            const timeElement = document.getElementById('time');
+            const dateElement = document.getElementById('date');
+            const temperatureElement = document.getElementById('temperature');
+            const clouds = document.getElementById('clouds');
+            const precipitation = document.getElementById('precipitation');
+
+            function pad00(arg) {
+                return String(arg).padStart(2, '0');
+            }
+
+            window.setInterval(() => {
+                const now = new Date();
+                timeElement.innerText = pad00(now.getHours()) + ':' + pad00(now.getMinutes());
+                dateElement.innerText = pad00(now.getDate()) + '-' + pad00(now.getMonth() + 1) + '-' + pad00(now.getFullYear());
+            }, 300);
+
+            function checkWeather() {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,cloud_cover,precipitation`;
+                fetch(url)
+                    .then(data => data.json())
+                    .then(data => {
+                        temperatureElement.innerText = data.current.temperature_2m + ' ' + data.current_units.temperature_2m;
+                        clouds.innerText = data.current.cloud_cover;
+                        precipitation.innerText = data.current.precipitation;
+                    });
+            }
+
+            checkWeather();
+
+            window.setInterval(fetch, 10 * 60_000);
+        </script>
+    </body>
+</html>

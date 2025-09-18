@@ -1,0 +1,74 @@
+/**
+  crt.css based on https://github.com/Billgonzo123/CRT-Filter
+**/
+
+.scanlines {
+  z-index: 3;
+  opacity: 0.3;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 110%;
+  height: 110%;
+  background-attachment: fixed;
+  image-rendering: pixelated;
+  mix-blend-mode: multiply;
+}
+
+.R {
+  z-index: 4;
+  background: url(img/R.png);
+  
+}
+
+.G {
+  z-index: 4;
+  background: url(img/G.png);
+
+}
+
+.B {
+  z-index: 4;
+  background: url(img/B.png);
+}
+
+.phosphorsWrapper {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.phosphorsContainer {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  transform: scale(1.3);
+}
+
+.mask {
+  image-rendering: pixelated;
+  z-index: 1;
+  opacity: .3;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 110%;
+  height: 110%;
+  background: url(img/mask.png);
+  mix-blend-mode: luminosity;
+}
+
+.crt {
+  filter:  brightness(1.1) saturate(120%) contrast(1.3) blur(0.1px);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
