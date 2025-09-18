@@ -6,7 +6,7 @@ Yes, I'm still using such an old Mac. And it's the only display I'm using, becau
 
 The display looks like this and it's 3.5" with an IPS screen of an actual resolution of 480x320 (the monitor emulates higher resolutions for HDMI compatibility).
 
-#![](./docs/img/hagibis.png)
+![](./docs/img/hagibis.png)
 
 ## Customization
 
