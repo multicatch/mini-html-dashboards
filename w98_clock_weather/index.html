@@ -73,7 +73,7 @@ body {
                 </div>
                 <div class="status-bar">
                     <p class="status-bar-field">Clouds: <span id="clouds">0</span>%</p>
-                    <p class="status-bar-field">Rain: <span id="precipitation">0</span>%</p>
+                    <p class="status-bar-field">Rain: <span id="precipitation">0</span>mm</p>
                 </div>
             </div>
             <div class="clock window">
@@ -143,7 +143,7 @@ body {
 
             checkWeather();
 
-            window.setInterval(fetch, 10 * 60_000);
+            window.setInterval(checkWeather, 10 * 60_000);
         </script>
     </body>
 </html>
