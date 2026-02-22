@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <link rel="stylesheet" href="https://unpkg.com/98.css" />
+        <link rel="stylesheet" href="../assets/crt.css" />
+        <style type="text/css">body { cursor: url('data:image/x-icon;base64,AAACAAEAICACAAcACQAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAYAAAAMAAAADAAAABgAAAEYAAABsAAAAfAAAAH+AAAB/AAAAfgAAAHwAAAB4AAAAcAAAAGAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//////////////////////////////////n////w////8P///+H///3h///8w////EP///wH///8AH///AD///wB///8A////Af///wP///8H////D////x////8/////f////////////////////////////////////////8='), auto; }</style>
+        <style>
+body {
+    margin: 0;
+    background-color: #008080;
+    height: 90vh;
+    width: 90vw;
+}
+
+.window {
+    transform: scale(2.5);
+}
+
+.clock {
+    width: 150px;
+    margin: 0;
+    position: absolute;
+    top: calc(50% - 100px);
+    left: 150px;
+    text-align: center;
+}
+
+#time {
+    font-size: 500%;
+    margin: 0;
+}
+
+#date {
+    /*font-size: 5vh;*/
+    margin: 0;
+}
+
+.weather {
+    width: 200px;
+    position: absolute;
+    right: 180px;
+    bottom: 200px;
+}
+
+.weather #temperature {
+    font-size: 200%;
+    font-weight: bold;
+}
+
+#current-weather-values {
+    display: flex;
+    flex-flow: row;
+    flex-direction: row;
+}
+
+#current-weather-values div {
+    padding-right: 1em;
+}
+
+.title-bar-controls > button {
+    margin-left: 2px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    transform: scale(1.1);
+}
+
+#forecast {
+    margin-top: 8px;
+}
+
+#forecast-tbody {
+    background-color: #fff;
+}
+
+        </style>
+    </head>
+    <body>
+        <div class="crt">
+            <div class="weather window">
+                <div class="title-bar inactive">
+                    <div class="title-bar-text">Weather</div>
+                    <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize" disabled></button>
+                    <button aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div id="temperature"></div>
+                    <div id="current-weather-values">
+                        <div>Clouds: <span id="clouds">0</span>%</div>
+                        <div>Rain: <span id="precipitation">0</span>mm</div>
+                    </div>
+                    <div id="forecast" class="sunken-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Min temp</th>
+                                <th>Max temp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forecast-tbody">
+
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            <div class="clock window">
+                <div class="title-bar">
+                    <div class="title-bar-text">Clock</div>
+                    <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div id="time">12:00</div>
+                    <div id="date">01-01-1970</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phosphorsWrapper">
+            <div class="phosphorsContainer">
+                <div class="red">
+                    <div class="scanlines R "> </div>
+                </div>
+
+                <div class="green">
+                    <div class="scanlines G "> </div>
+                </div>
+
+                <div class="blue">
+                    <div class="scanlines B"> </div>
+                </div>
+
+                <div class="mask"></div>
+
+            </div>
+        </div>
+        <script>
+            const latitude = '0.0';
+            const longitude = '0.0';
+
+            const timeElement = document.getElementById('time');
+            const dateElement = document.getElementById('date');
+            const temperatureElement = document.getElementById('temperature');
+            const clouds = document.getElementById('clouds');
+            const precipitation = document.getElementById('precipitation');
+            const forecast = document.getElementById('forecast-tbody');
+
+            function pad00(arg) {
+                return String(arg).padStart(2, '0');
+            }
+
+            window.setInterval(() => {
+                const now = new Date();
+                timeElement.innerText = pad00(now.getHours()) + ':' + pad00(now.getMinutes());
+                dateElement.innerText = pad00(now.getDate()) + '-' + pad00(now.getMonth() + 1) + '-' + pad00(now.getFullYear());
+            }, 300);
+
+            function insertForecast(data, element) {
+                const dailyForecast = data.daily;
+                const maxTemps = dailyForecast.temperature_2m_max;
+                const tempUnit = data.daily_units.temperature_2m_max;
+                const minTemps = dailyForecast.temperature_2m_min;
+                const date = new Date();
+                for (const index in maxTemps) {
+                    date.setDate(date.getDate() + 1);
+                    const nextDayForecast = document.createElement('tr');
+
+                    const dayOfWeek = document.createElement('td');
+                    dayOfWeek.innerText = date.toLocaleDateString('en-EN', { weekday: 'long' });
+                    nextDayForecast.appendChild(dayOfWeek);
+
+                    const minTemp = document.createElement('td');
+                    minTemp.innerText = minTemps[index] + tempUnit;
+                    nextDayForecast.appendChild(minTemp);
+
+                    const maxTemp = document.createElement('td');
+                    maxTemp.innerText = maxTemps[index] + tempUnit;
+                    nextDayForecast.appendChild(maxTemp);
+
+                    element.appendChild(nextDayForecast);
+                }
+            }
+
+            function checkWeather() {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min,rain_sum,snowfall_sum&current=temperature_2m,cloud_cover,rain,showers`;
+                fetch(url)
+                    .then(data => data.json())
+                    .then(data => {
+                        temperatureElement.innerText = data.current.temperature_2m + ' ' + data.current_units.temperature_2m;
+                        clouds.innerText = data.current.cloud_cover;
+                        precipitation.innerText = Math.max(data.current.rain, data.current.showers);
+                        forecast.innerHTML = '';
+                        insertForecast(data, forecast);
+                    });
+            }
+
+            checkWeather();
+
+            window.setInterval(checkWeather, 30 * 60_000);
+        </script>
+    </body>
+</html>
