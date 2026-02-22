@@ -171,11 +171,14 @@ body {
                 const minTemps = dailyForecast.temperature_2m_min;
                 const date = new Date();
                 for (const index in maxTemps) {
-                    date.setDate(date.getDate() + 1);
                     const nextDayForecast = document.createElement('tr');
 
                     const dayOfWeek = document.createElement('td');
-                    dayOfWeek.innerText = date.toLocaleDateString('en-EN', { weekday: 'long' });
+                    if (index == 0) {
+                        dayOfWeek.innerText = 'Today';
+                    } else {
+                        dayOfWeek.innerText = date.toLocaleDateString('en-EN', { weekday: 'long' });
+                    }
                     nextDayForecast.appendChild(dayOfWeek);
 
                     const minTemp = document.createElement('td');
@@ -187,6 +190,7 @@ body {
                     nextDayForecast.appendChild(maxTemp);
 
                     element.appendChild(nextDayForecast);
+                    date.setDate(date.getDate() + 1);
                 }
             }
 
